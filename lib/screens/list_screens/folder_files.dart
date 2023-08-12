@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../functions/database_functions/database_functions.dart';
+import '../../functions/database_functions/mostly_played_funtions.dart';
 import '../../model/video_model.dart';
 import '../../we_player/video_player.dart';
 import '../../widgets/custom_widgets/custom_listtile.dart';
@@ -58,6 +60,9 @@ class FolderFiles extends StatelessWidget {
                     onPressed: () {
                       currentIndex = index;
                       currentVideoList = videos;
+                      MostlyPlayedFunctions()
+                                              .addToMostlyPlayed(currentVideoList[currentIndex]);
+                          DatabaseFunctions.addToRecent(currentVideoList[currentIndex]);
                       ShowFileMenuState()
                           .showFileMenu(context, videos[index], null, context);
                     },

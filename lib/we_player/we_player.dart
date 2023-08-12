@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:video_player/video_player.dart';
 import 'package:wakelock/wakelock.dart';
 
+import '../functions/database_functions/database_functions.dart';
+import '../functions/database_functions/mostly_played_funtions.dart';
 import '../notifiers/notifiers.dart';
 import '../screens/main_screens/home_screen.dart';
 import 'custom_video_progress_bar.dart';
@@ -156,6 +158,12 @@ class WEPlayerState extends State<WEPlayer> {
                                   onPressed: currentIndex != 0
                                       ? () {
                                           currentIndex--;
+                                          MostlyPlayedFunctions()
+                                              .addToMostlyPlayed(
+                                                  currentVideoList[
+                                                      currentIndex]);
+                                          DatabaseFunctions.addToRecent(
+                                              currentVideoList[currentIndex]);
                                           Navigator.of(context)
                                               .pushNamedAndRemoveUntil(
                                                   '/videoplayer',
@@ -196,6 +204,9 @@ class WEPlayerState extends State<WEPlayer> {
                                           currentIndex + 1
                                       ? () {
                                           currentIndex++;
+                                          MostlyPlayedFunctions()
+                                              .addToMostlyPlayed(currentVideoList[currentIndex]);
+                          DatabaseFunctions.addToRecent(currentVideoList[currentIndex]);
                                           Navigator.of(context)
                                               .pushNamedAndRemoveUntil(
                                                   '/videoplayer',

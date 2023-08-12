@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../functions/database_functions/database_functions.dart';
 import '../../functions/database_functions/mostly_played_funtions.dart';
 import '../../model/mostly_played_model.dart';
 import '../../model/video_model.dart';
@@ -64,6 +65,9 @@ class _MostlyPlayedPageState extends State<MostlyPlayedPage> {
                         }
                         currentVideoList = tempListFromMostlyPlayed;
                         currentIndex = index;
+                        MostlyPlayedFunctions()
+                                              .addToMostlyPlayed(currentVideoList[currentIndex]);
+                          DatabaseFunctions.addToRecent(currentVideoList[currentIndex]);
                         Navigator.pushNamed(context, '/videoplayer');
                       },
                     ),

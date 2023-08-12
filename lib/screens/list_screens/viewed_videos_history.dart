@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../functions/database_functions/database_functions.dart';
+import '../../functions/database_functions/mostly_played_funtions.dart';
 import '../../model/video_model.dart';
 import '../../we_player/video_player.dart';
 import '../../widgets/animations/empty_animation.dart';
@@ -66,6 +67,9 @@ class ViewedVideosHistory extends StatelessWidget {
                               onTap: () {
                                 currentIndex = index;
                                 currentVideoList = tempHistoryList;
+                                MostlyPlayedFunctions()
+                                              .addToMostlyPlayed(currentVideoList[currentIndex]);
+                          DatabaseFunctions.addToRecent(currentVideoList[currentIndex]);
 
                                 currentRouteName = '/history';
                                 Navigator.pushNamed(context, '/videoplayer');

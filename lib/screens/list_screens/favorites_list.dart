@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../functions/database_functions/database_functions.dart';
+import '../../functions/database_functions/mostly_played_funtions.dart';
 import '../../model/video_model.dart';
 import '../../we_player/video_player.dart';
 import '../../we_player/we_player.dart';
@@ -93,6 +94,9 @@ class _FavoritesListState extends State<FavoritesList> {
                                 currentRouteName = '/home';
                                 currentIndex = index;
                                 currentVideoList = list;
+                                MostlyPlayedFunctions()
+                                              .addToMostlyPlayed(currentVideoList[currentIndex]);
+                          DatabaseFunctions.addToRecent(currentVideoList[currentIndex]);
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(

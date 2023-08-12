@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../functions/database_functions/database_functions.dart';
+import '../../functions/database_functions/mostly_played_funtions.dart';
 import '../../functions/database_functions/playlist_database_funtions.dart';
 import '../../functions/dialogs/daialog_functions.dart';
 import '../../functions/dialogs/warning_popups.dart';
@@ -90,6 +91,10 @@ class _CurrentPlaylistItemState extends State<CurrentPlaylistItem> {
                               size: 30,
                             )),
                         onTap: () {
+                          MostlyPlayedFunctions()
+                                              .addToMostlyPlayed(
+                                  value[widget.currentPlaylistIndex]
+                                      .playlistItem[index]);
                           if (isVideoFloating) {
                             WEPlayerState.removeOverlay();
                           }
