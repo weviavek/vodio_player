@@ -7,7 +7,6 @@ import 'package:wakelock/wakelock.dart';
 
 import '../functions/database_functions/database_functions.dart';
 import '../functions/database_functions/mostly_played_funtions.dart';
-import '../notifiers/notifiers.dart';
 import '../screens/main_screens/home_screen.dart';
 import 'custom_video_progress_bar.dart';
 import 'floating_video_player.dart';

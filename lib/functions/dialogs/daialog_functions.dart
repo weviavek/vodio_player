@@ -161,14 +161,14 @@ class Dialogs extends ChangeNotifier {
     TextEditingController controller = TextEditingController();
     controller.value = TextEditingValue(text: currentName);
 
-    final GlobalKey<State> _dialogKey = GlobalKey<State>();
+    final GlobalKey<State> dialogKey = GlobalKey<State>();
     bool showError = false;
     showDialog(
         context: context,
         builder: (BuildContext context) => ValueListenableBuilder(
               valueListenable: errorNotifier,
               builder: (context, value, _) => AlertDialog(
-                key: _dialogKey,
+                key: dialogKey,
                 content: TextField(
                   controller: controller,
                   decoration: InputDecoration(
@@ -197,7 +197,7 @@ class Dialogs extends ChangeNotifier {
                             PlaylistFuntions().editPlaylistName(currentName,
                                 controller.text.trim(), currentList, indexInDB);
 
-                            Navigator.pop(_dialogKey.currentContext!);
+                            Navigator.pop(dialogKey.currentContext!);
                           }
                         } else {
                           showError = true;
