@@ -62,6 +62,7 @@ class FloatingVideoPlayerWidgetState extends State<FloatingVideoPlayerWidget> {
             type: MaterialType.transparency,
             child: IconButton(
               onPressed: () {
+                
                 WEPlayerState.removeOverlay();
                 currentVideoPlayerController!.pause();
               },

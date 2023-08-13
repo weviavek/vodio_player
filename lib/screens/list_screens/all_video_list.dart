@@ -5,7 +5,6 @@ import '../../functions/database_functions/database_functions.dart';
 import '../../functions/database_functions/mostly_played_funtions.dart';
 import '../../functions/sorting/sorting_functions.dart';
 import '../../functions/storage_functions/initial_functions.dart';
-import '../../model/video_model.dart';
 import '../../we_player/floating_video_player.dart';
 import '../../we_player/video_player.dart';
 import '../../we_player/we_player.dart';
@@ -27,10 +26,9 @@ class AllVideoList extends StatefulWidget {
 }
 
 class AllVideoListState extends State<AllVideoList> {
+  int listCount = 15;
   ScrollController scrollController = ScrollController();
   bool _isLoading = false;
-
-  List<VideoModel> items =videoList.length<15?videoList: videoList.sublist(0, 15);
 
   @override
   void initState() {
@@ -58,13 +56,12 @@ class AllVideoListState extends State<AllVideoList> {
       _isLoading = true;
     });
     Future.delayed(const Duration(seconds: 2), () {
-      int tempLength = items.length + 10 >= videoList.length
-          ? videoList.length
-          : items.length + 10;
-      List<VideoModel> moreItems = videoList.sublist(items.length, tempLength);
+     
 
       setState(() {
-        items.addAll(moreItems);
+         listCount = listCount + 10 >= videoList.length
+          ? videoList.length
+          : listCount + 10;
         _isLoading = false;
       });
     });
@@ -147,9 +144,9 @@ class AllVideoListState extends State<AllVideoList> {
                                   const EdgeInsets.only(top: 25.0, bottom: 25),
                               child: ListView.separated(
                                   shrinkWrap: true,
-                                  itemCount: items.length != videoList.length
-                                      ? items.length + 1
-                                      : items.length,
+                                  itemCount: listCount != videoList.length
+                                      ? listCount + 1
+                                      : listCount,
                                   physics: const NeverScrollableScrollPhysics(),
                                   separatorBuilder: (context, index) =>
                                       const Padding(
@@ -165,8 +162,8 @@ class AllVideoListState extends State<AllVideoList> {
                                         ),
                                       ),
                                   itemBuilder: (context, index) {
-                                    if (index == items.length) {
-                                      if (items.length != videoList.length) {
+                                    if (index == listCount) {
+                                      if (listCount != videoList.length) {
                                         return const SizedBox(
                                             height: 80, child: MiniLoading());
                                       } else {
@@ -205,22 +202,22 @@ class AllVideoListState extends State<AllVideoList> {
                                           ]),
                                         ),
                                         title: Text(
-                                          items[index].videoName,
+                                          videoList[index].videoName,
                                           overflow: TextOverflow.ellipsis,
                                           style: listTileTitleText,
                                         ),
                                         subTitle: Text(
-                                          items[index].videoSize,
+                                          videoList[index].videoSize,
                                           style: listTileSubTitleText,
                                         ),
                                         onTap: () {
                                           MostlyPlayedFunctions()
-                                              .addToMostlyPlayed(items[index]);
+                                              .addToMostlyPlayed(videoList[index]);
                                           if (isVideoFloating) {
                                             WEPlayerState.removeOverlay();
                                           }
                                           DatabaseFunctions.addToRecent(
-                                              items[index]);
+                                              videoList[index]);
                                           currentIndex = index;
                                           currentVideoList = videoList;
 
@@ -234,7 +231,7 @@ class AllVideoListState extends State<AllVideoList> {
                                               currentVideoList = videoList;
                                               ShowFileMenuState().showFileMenu(
                                                   context,
-                                                  items[index],
+                                                  videoList[index],
                                                   null,
                                                   context);
                                             },
@@ -246,7 +243,7 @@ class AllVideoListState extends State<AllVideoList> {
                             ),
                           ),
                         ),
-                        _isLoading && items.length != videoList.length
+                        _isLoading && videoList.length != videoList.length
                             ? const Center(
                                 child: SizedBox(
                                     width: 50,
@@ -257,7 +254,7 @@ class AllVideoListState extends State<AllVideoList> {
                       ],
                     ),
                   )
-                :const EmptyScreen(
+                : const EmptyScreen(
                     pageName: "List",
                   )));
   }

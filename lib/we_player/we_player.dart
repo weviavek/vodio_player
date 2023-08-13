@@ -157,13 +157,11 @@ class WEPlayerState extends State<WEPlayer> {
                               IconButton(
                                   onPressed: currentIndex != 0
                                       ? () {
+
                                           currentIndex--;
                                           MostlyPlayedFunctions()
-                                              .addToMostlyPlayed(
-                                                  currentVideoList[
-                                                      currentIndex]);
-                                          DatabaseFunctions.addToRecent(
-                                              currentVideoList[currentIndex]);
+                                              .addToMostlyPlayed(currentVideoList[currentIndex]);
+                          DatabaseFunctions.addToRecent(currentVideoList[currentIndex]);
                                           Navigator.of(context)
                                               .pushNamedAndRemoveUntil(
                                                   '/videoplayer',
@@ -204,9 +202,6 @@ class WEPlayerState extends State<WEPlayer> {
                                           currentIndex + 1
                                       ? () {
                                           currentIndex++;
-                                          MostlyPlayedFunctions()
-                                              .addToMostlyPlayed(currentVideoList[currentIndex]);
-                          DatabaseFunctions.addToRecent(currentVideoList[currentIndex]);
                                           Navigator.of(context)
                                               .pushNamedAndRemoveUntil(
                                                   '/videoplayer',
