@@ -26,7 +26,8 @@ class AllVideoList extends StatefulWidget {
 }
 
 class AllVideoListState extends State<AllVideoList> {
-  int listCount = 15;
+
+  int listCount =videoList.length<15?videoList.length:15;
   ScrollController scrollController = ScrollController();
   bool _isLoading = false;
 
@@ -51,17 +52,16 @@ class AllVideoListState extends State<AllVideoList> {
   }
 
   void _loadMoreItems() {
-    // Simulate a delay to fetch more items, replace this with your actual data loading logic
     setState(() {
       _isLoading = true;
     });
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 3), () {
      
 
       setState(() {
-         listCount = listCount + 10 >= videoList.length
+         listCount = listCount + 5 >= videoList.length
           ? videoList.length
-          : listCount + 10;
+          : listCount + 5;
         _isLoading = false;
       });
     });

@@ -32,6 +32,14 @@ class WEPlayerState extends State<WEPlayer> {
   Timer? _timer;
   bool _showButton = true;
   Icon? currentFullScreenIcon;
+   void _hideButtonsAfterDelay() {
+    _resetTimer();
+    _timer = Timer(const Duration(seconds: 4), () {
+      setState(() {
+        _showButton = false;
+      });
+    });
+  }
   void _resetTimer() {
     _timer?.cancel();
     _timer = Timer(const Duration(seconds: 4), () {
@@ -125,18 +133,17 @@ class WEPlayerState extends State<WEPlayer> {
     return Material(
       color: Colors.black,
       child: GestureDetector(
-        onTap: () {
-          if (_showButton) {
-            setState(() {
-              _showButton = false;
-            });
-            Notifier.notifyTimer();
-            _timer?.cancel();
-          } else {
+        onTap: (){
+          if (!_showButton) {
             setState(() {
               _showButton = true;
             });
-            _resetTimer();
+            _hideButtonsAfterDelay();
+          } else {
+            setState(() {
+              _showButton = false;
+            });
+            _timer?.cancel();
           }
         },
         child: Stack(children: [
@@ -154,69 +161,91 @@ class WEPlayerState extends State<WEPlayer> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              IconButton(
-                                  onPressed: currentIndex != 0
-                                      ? () {
-
-                                          currentIndex--;
-                                          MostlyPlayedFunctions()
-                                              .addToMostlyPlayed(currentVideoList[currentIndex]);
-                          DatabaseFunctions.addToRecent(currentVideoList[currentIndex]);
-                                          Navigator.of(context)
-                                              .pushNamedAndRemoveUntil(
-                                                  '/videoplayer',
-                                                  (route) => route.isFirst);
-                                        }
-                                      : null,
-                                  icon: Icon(
-                                    Icons.skip_previous_rounded,
-                                    color: videoPlayerIconColor,
-                                    size: videoPlayerIconSize,
-                                  )),
+                              Container(
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.grey.withOpacity(0.5),
+                                ),
+                                child: IconButton(
+                                    onPressed: currentIndex != 0
+                                        ? () {
+                                            currentIndex--;
+                                            MostlyPlayedFunctions()
+                                                .addToMostlyPlayed(
+                                                    currentVideoList[
+                                                        currentIndex]);
+                                            DatabaseFunctions.addToRecent(
+                                                currentVideoList[currentIndex]);
+                                            Navigator.of(context)
+                                                .pushNamedAndRemoveUntil(
+                                                    '/videoplayer',
+                                                    (route) => route.isFirst);
+                                          }
+                                        : null,
+                                    icon: Icon(
+                                      Icons.skip_previous_rounded,
+                                      color: videoPlayerIconColor,
+                                      size: videoPlayerIconSize,
+                                    )),
+                              ),
                               Padding(
                                 padding: EdgeInsets.only(
                                     left: MediaQuery.sizeOf(context).width / 6,
                                     right:
                                         MediaQuery.sizeOf(context).width / 6),
-                                child: IconButton(
-                                  onPressed: _togglePlay,
-                                  icon: ValueListenableBuilder(
-                                      valueListenable:
-                                          currentVideoPlayerController!,
-                                      builder: (context, value, child) {
-                                        if (value.duration == value.position) {
-                                          return replayIcon;
-                                        } else if (currentVideoPlayerController!
-                                            .value.isPlaying) {
-                                          return pauseIcon;
-                                        } else {
-                                          return playIocn;
-                                        }
-                                      }),
-                                  color: videoPlayerIconColor,
-                                  iconSize: videoPlayerIconSize,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.grey.withOpacity(0.5),
+                                  ),
+                                  child: IconButton(
+                                    onPressed: _togglePlay,
+                                    icon: ValueListenableBuilder(
+                                        valueListenable:
+                                            currentVideoPlayerController!,
+                                        builder: (context, value, child) {
+                                          if (value.duration ==
+                                              value.position) {
+                                            return replayIcon;
+                                          } else if (currentVideoPlayerController!
+                                              .value.isPlaying) {
+                                            return pauseIcon;
+                                          } else {
+                                            return playIocn;
+                                          }
+                                        }),
+                                    color: videoPlayerIconColor,
+                                    iconSize: videoPlayerIconSize,
+                                  ),
                                 ),
                               ),
-                              IconButton(
-                                  onPressed: currentVideoList.length >
-                                          currentIndex + 1
-                                      ? () {
-                                          currentIndex++;
-                                          Navigator.of(context)
-                                              .pushNamedAndRemoveUntil(
-                                                  '/videoplayer',
-                                                  currentRouteName == '/home'
-                                                      ? (route) => route.isFirst
-                                                      : ModalRoute.withName(
-                                                          currentRouteName));
-                                          Wakelock.enable();
-                                        }
-                                      : null,
-                                  icon: Icon(
-                                    Icons.skip_next_rounded,
-                                    color: videoPlayerIconColor,
-                                    size: videoPlayerIconSize,
-                                  )),
+                              Container(
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.grey.withOpacity(0.5),
+                                ),
+                                child: IconButton(
+                                    onPressed: currentVideoList.length >
+                                            currentIndex + 1
+                                        ? () {
+                                            currentIndex++;
+                                            Navigator.of(context)
+                                                .pushNamedAndRemoveUntil(
+                                                    '/videoplayer',
+                                                    currentRouteName == '/home'
+                                                        ? (route) =>
+                                                            route.isFirst
+                                                        : ModalRoute.withName(
+                                                            currentRouteName));
+                                            Wakelock.enable();
+                                          }
+                                        : null,
+                                    icon: Icon(
+                                      Icons.skip_next_rounded,
+                                      color: videoPlayerIconColor,
+                                      size: videoPlayerIconSize,
+                                    )),
+                              ),
                             ],
                           ),
                         ),

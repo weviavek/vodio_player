@@ -7,7 +7,7 @@ part 'playlist_model.g.dart';
 class PlaylistItemModel {
   PlaylistItemModel({required this.playlistName, required this.playlistItem});
   @HiveField(0)
-  final String playlistName;
+  String playlistName;
   @HiveField(1)
   List<VideoModel> playlistItem;
 }

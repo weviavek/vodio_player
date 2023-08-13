@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vodio_player/widgets/on_screen_widgets/snackbar_helper.dart';
 
 import '../../model/video_model.dart';
 import '../database_functions/playlist_database_funtions.dart';
@@ -21,6 +22,8 @@ class WarningPopup {
             onPressed: () {
               PlaylistFuntions().deleteCurrentPlaylist(currentPlaylistName);
               Navigator.pop(context);
+              SnackBarhelper.snack(
+                  context, "$currentPlaylistName deleted from playlists");
             },
             child: const Text('Yes'),
           ),
@@ -49,6 +52,8 @@ class WarningPopup {
             onPressed: () {
               PlaylistFuntions().removeVideoFromPlaylist(
                   currentPlaylistName, indexInDB, currentVideoModelInDB);
+              SnackBarhelper.snack(
+                  context, "Video remover from $currentPlaylistName");
               Navigator.pop(context);
             },
             child: const Text('Yes'),

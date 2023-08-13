@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vodio_player/widgets/on_screen_widgets/snackbar_helper.dart';
 
 import '../../model/video_model.dart';
 import '../../widgets/custom_widgets/thumbnail_widget.dart';
@@ -36,7 +37,7 @@ class Dialogs extends ChangeNotifier {
                             errorNotifier.notifyListeners();
                           } else {
                             showError = false;
-                                                        await PlaylistFuntions()
+                            await PlaylistFuntions()
                                 .createPlaylist(controller.text.trim())
                                 .then((value) => Navigator.of(context).pop());
                           }
@@ -130,6 +131,8 @@ class Dialogs extends ChangeNotifier {
                                         playlistNotifier
                                             .value[index].playlistName,
                                         currentVideoModel);
+                                    SnackBarhelper.snack(context,
+                                        "Video added to ${playlistNotifier.value[index].playlistName}");
                                   }),
                           separatorBuilder: (_, __) => const Divider(),
                           itemCount: playlistNotifier.value.length)
@@ -139,7 +142,7 @@ class Dialogs extends ChangeNotifier {
                                 Navigator.pop(context);
                                 createPlaylistDialog(context);
                               },
-                              child:const Text("Create New Playlist")),
+                              child: const Text("Create New Playlist")),
                         )),
             ));
   }
@@ -151,5 +154,62 @@ class Dialogs extends ChangeNotifier {
       }
     }
     return false;
+  }
+
+  editPlaylistName(context, String currentName, List<VideoModel> currentList,
+      int indexInDB) {
+    TextEditingController controller = TextEditingController();
+    controller.value = TextEditingValue(text: currentName);
+
+    final GlobalKey<State> _dialogKey = GlobalKey<State>();
+    bool showError = false;
+    showDialog(
+        context: context,
+        builder: (BuildContext context) => ValueListenableBuilder(
+              valueListenable: errorNotifier,
+              builder: (context, value, _) => AlertDialog(
+                key: _dialogKey,
+                content: TextField(
+                  controller: controller,
+                  decoration: InputDecoration(
+                      labelText: 'Enter playlist name',
+                      errorText: showError ? value : null),
+                ),
+                actions: [
+                  TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text("Maybr Later")),
+                  ElevatedButton(
+                      onPressed: () async {
+                        if (controller.text.trim() == currentName) {
+                          showError = true;
+                          errorNotifier.value = "It's the same name";
+                          errorNotifier.notifyListeners();
+                        } else if (!(await PlaylistFuntions()
+                            .containsPlaylist(controller.text.trim()))) {
+                          if (controller.text == '') {
+                            showError = true;
+                            errorNotifier.value = "Name can't be empty";
+                            errorNotifier.notifyListeners();
+                          } else {
+                            showError = false;
+
+                            PlaylistFuntions().editPlaylistName(currentName,
+                                controller.text.trim(), currentList, indexInDB);
+
+                            Navigator.pop(_dialogKey.currentContext!);
+                          }
+                        } else {
+                          showError = true;
+                          errorNotifier.value =
+                              "Name already exists in playlist !!\nTry another name";
+                          //code to snack
+                          errorNotifier.notifyListeners();
+                        }
+                      },
+                      child: const Text("Create"))
+                ],
+              ),
+            ));
   }
 }

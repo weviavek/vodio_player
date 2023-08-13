@@ -56,27 +56,27 @@ class SearchScreen extends SearchDelegate {
                     ),
                   ),
                   title: Text(
-                    matchItem[index].videoName,
+                    currentVideoList[index].videoName,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  subtitle: Text(matchItem[index].videoSize),
+                  subtitle: Text(currentVideoList[index].videoSize),
                   trailing: IconButton(
                       onPressed: () => ShowFileMenuState().showFileMenu(
-                          context, matchItem[index], null, context),
+                          context, currentVideoList[index], null, context),
                       icon: const Icon(Icons.more_vert)),
                   onTap: () {
                     currentRouteName = '/home';
                     if (isVideoFloating) {
                       WEPlayerState.removeOverlay();
                     }
-                    DatabaseFunctions.addToRecent(matchItem[index]);
+                    DatabaseFunctions.addToRecent(currentVideoList[index]);
                     currentIndex = index;
-                    currentVideoList = matchItem;
+                    currentVideoList = currentVideoList;
                     Navigator.pushNamed(context, "/videoplayer");
                   },
                 ),
             separatorBuilder: (context, index) => const Divider(),
-            itemCount: matchItem.length)
+            itemCount: currentVideoList.length)
         :const NotFoundScreen();
   }
 
@@ -90,7 +90,38 @@ class SearchScreen extends SearchDelegate {
     }
     return Padding(
         padding: const EdgeInsets.only(top: 12),
-        child: !(query.isEmpty || matchItem.isEmpty)
+        child:query.isEmpty?ListView.separated(
+                itemBuilder: (context, index) => ListTile(
+                      leading: ClipRRect(
+                        borderRadius: BorderRadius.circular(15),
+                        child: SizedBox(
+                          height: 60,
+                          width: 90,
+                          child: FutureBuilder(
+                              future: ThumbnailWidget()
+                                  .thumbnailImage(currentVideoList[index].videoPath),
+                              builder: (builder, snapshot) => snapshot.hasData
+                                  ? snapshot.data!
+                                  : const CircularProgressIndicator()),
+                        ),
+                      ),
+                      title: Text(
+                        matchItem[index].videoName,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      onTap: () {
+                        currentRouteName = '/home';
+                        if (isVideoFloating) {
+                          WEPlayerState.removeOverlay();
+                        }
+                        DatabaseFunctions.addToRecent(matchItem[index]);
+                        currentIndex = index;
+                        currentVideoList = matchItem;
+                        Navigator.pushNamed(context, "/videoplayer");
+                      },
+                    ),
+                separatorBuilder: (context, index) => const Divider(),
+                itemCount: matchItem.length): matchItem.isEmpty
             ? ListView.separated(
                 itemBuilder: (context, index) => ListTile(
                       leading: ClipRRect(

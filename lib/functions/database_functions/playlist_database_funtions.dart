@@ -78,4 +78,13 @@ class PlaylistFuntions extends ChangeNotifier {
 
     getPlaylistFromDB();
   }
+
+  void editPlaylistName(String currentName, String newName,
+      List<VideoModel> itemList, int indexInDB) async {
+    Box playlistDB = await Hive.openBox<PlaylistItemModel>("playlist");
+    PlaylistItemModel modeifiedModel =
+        PlaylistItemModel(playlistName: newName, playlistItem: itemList);
+    playlistDB.putAt(indexInDB, modeifiedModel);
+    getPlaylistFromDB();
+  }
 }

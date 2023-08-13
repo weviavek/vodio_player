@@ -31,7 +31,15 @@ class _CurrentPlaylistItemState extends State<CurrentPlaylistItem> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.currentPlaylistName),
+        title: ValueListenableBuilder(valueListenable: playlistNotifier,builder: (context, value, child)=> Text(value[widget.currentPlaylistIndex].playlistName)),
+        actions: [
+          IconButton(
+              onPressed: () {
+                Dialogs().editPlaylistName(
+                    context, widget.currentPlaylistName, widget.currentPlaylistItems, widget.currentPlaylistIndex);
+              },
+              icon: const Icon(Icons.edit_rounded))
+        ],
       ),
       body: ValueListenableBuilder(
           valueListenable: playlistNotifier,
@@ -72,7 +80,7 @@ class _CurrentPlaylistItemState extends State<CurrentPlaylistItem> {
                         ]),
                         title: Text(value[widget.currentPlaylistIndex]
                             .playlistItem[index]
-                            .videoName),
+                            .videoName,overflow: TextOverflow.ellipsis,),
                         subtitle: Text(value[widget.currentPlaylistIndex]
                             .playlistItem[index]
                             .videoSize),
@@ -91,10 +99,9 @@ class _CurrentPlaylistItemState extends State<CurrentPlaylistItem> {
                               size: 30,
                             )),
                         onTap: () {
-                          MostlyPlayedFunctions()
-                                              .addToMostlyPlayed(
-                                  value[widget.currentPlaylistIndex]
-                                      .playlistItem[index]);
+                          MostlyPlayedFunctions().addToMostlyPlayed(
+                              value[widget.currentPlaylistIndex]
+                                  .playlistItem[index]);
                           if (isVideoFloating) {
                             WEPlayerState.removeOverlay();
                           }
