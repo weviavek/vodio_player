@@ -10,29 +10,27 @@ class PermissionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Lottie.asset("assets/animations/permision.json"),
-              const Text(
-                "Please Turn on Permission \nManually...!!",
-                style: TextStyle(fontSize: 25),
-                textAlign: TextAlign.center,
-              ),
-              ElevatedButton(
-                  onPressed: () async {
-                    await openAppSettings();
-                    Timer.periodic(const Duration(seconds: 2), (timer) async {
-                      Notifier.notifyFirstScreen();
-                      timer.cancel();
-                    });
-                  },
-                  child:const Text("Go To App Settings"))
-            ],
-          ),
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Lottie.asset("assets/animations/permision.json"),
+            const Text(
+              "Please Turn on Permission \nManually...!!",
+              style: TextStyle(fontSize: 25),
+              textAlign: TextAlign.center,
+            ),
+            ElevatedButton(
+                onPressed: () async {
+                  await openAppSettings();
+                  Timer.periodic(const Duration(seconds: 2), (timer) async {
+                    Notifier.notifyFirstScreen();
+                    timer.cancel();
+                  });
+                },
+                child: const Text("Go To App Settings"))
+          ],
         ),
       ),
     );

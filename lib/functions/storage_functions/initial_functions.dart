@@ -64,6 +64,7 @@ class InitialFunctions {
       } else {
         return null;
       }
+      await Future.delayed(const Duration(seconds: 3));
       Directory root = Directory('/storage/emulated/0');
       root.listSync().forEach((element) {
         //avoids android folder
@@ -128,6 +129,7 @@ class InitialFunctions {
         SortingFunctions.sortFolderAtoB(videoDirectories.keys.toList(), null);
 
     videoList = SortingFunctions().mergeSortByNameAtoZ(videoList, null);
+    await Future.delayed(const Duration(seconds: 3));
     return androidVersion;
   }
 }
