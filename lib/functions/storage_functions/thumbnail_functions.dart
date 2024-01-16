@@ -3,14 +3,15 @@ import 'package:video_thumbnail/video_thumbnail.dart';
 
 class ThumbanailFunctions {
   Future<String?> generateVideoThumbnail(String videoPath) async {
-    String? temp = await VideoThumbnail.thumbnailFile(
+    
+    String? thumpnailPath = await VideoThumbnail.thumbnailFile(
       timeMs: 1000,
       video: videoPath,
-      thumbnailPath: (await getApplicationDocumentsDirectory()).path,
+      thumbnailPath: (await getTemporaryDirectory()).path,
       imageFormat: ImageFormat.JPEG,
       maxWidth: 120,
       quality: 100,
     );
-    return temp;
+    return thumpnailPath ?? 'Failed to generate thumpnail';
   }
 }
